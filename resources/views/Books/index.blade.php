@@ -1,56 +1,47 @@
 @extends('layouts.template')
 
-@section('title', 'Books List')
+@section('title', 'Book List')
 
 @section('content')
-
-    <div class="mt-4 p-5 bg-black text-white rounded">
+    <div class="mt-4 p-5 bg-dark text-white rounded">
         <h1>All Books</h1>
-        {{-- Add button --}}
-        <a href="{{ route('books.create') }}" class="btn btn-primary btn-sm">Add New Books</a>
+        <a href="{{ route('books.create') }}" class="btn btn-light btn-sm">Add New Books</a>
     </div>
-    @if (session()->has('success'))
-        <div class="alert alert-success mt-4">
-            {{ session()->get('success') }}
-        </div>
-    @endif
 
     <div class="container mt-5">
         <table class="table table-bordered mb-5">
             <thead>
-                <tr class="table-success">
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Body</th>
+                <tr class="table-dark">
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Judul</th>
+                    <th scope="col">Halaman</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Penerbit</th>
                     <th scope="col">Created At</th>
                     <th scope="col">Updated At</th>
-                    <th scope="col">Actions</th>
-
+                    <th scope="col">Edit / Delete</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($books as $books)
+                @forelse ($books as $book)
                     <tr>
-                        <th scope="row">{{ $books->id }}</th>
+                        <th scope="row">{{ $book->isbn }}</th>
+                        <td><a href="{{route('books.show', $book)}}">{{ $book->judul}}</a></td>
+                        <td>{{ $book->halaman }}</td>
+                        <td>{{ $book->kategori }}</td>
+                        <td>{{ $book->penerbit }}</td>
+                        <td>{{ $book->created_at }}</td>
+                        <td>{{ $book->updated_at }}</td>
                         <td>
-                            <a href="{{ route('articles.show', $books) }}">
-                                {{ $books->title }}
-                            </a>
-                        </td>
-                        <td>{{ Str::limit($books->body, 50, ' ...') }}</td>
-                        <td>{{ $books->created_at }}</td>
-                        <td>{{ $books->updated_at }}</td>
-                        <td>
-                            <a href="{{ route('articles.edit', $books) }}" class="btn btn-primary btn-sm">
-                                Edit
-                            </a>
-                            <form action="{{ route('books.destroy', $books) }}" method="POST" class="d-inline-block">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete
-                                </button>
-                            </form>
+                            <a href="{{ route('books.edit', $book)}}" class="btn btn-primary btn-sm">Edit</a>
+                                <form action="{{ route('books.destroy', $book) }}" method="POST"
+                                class="d-inline-block">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure?')">Delete
+                                    </button>
+                                </form>
                         </td>
                     </tr>
                 @empty
